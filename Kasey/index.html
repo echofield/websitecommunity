@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulateur de Projet - par [Nom de votre Écosystème]</title>
+    <title>Simulateur de Projet - The Foundry</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,7 @@
 
     <div id="page-wrapper">
         <header class="py-6 text-center">
-            <h2 class="font-mono text-lg font-bold">[Nom de votre Écosystème]</h2>
+            <h2 class="font-mono text-lg font-bold">The Foundry</h2>
         </header>
         <main class="container mx-auto px-6">
             <section id="intro-section" class="hero-section min-h-[80vh] flex flex-col items-center justify-center text-center py-20 relative">
@@ -46,7 +46,7 @@
                         <p>Notre simulateur intelligent analyse votre besoin en 2 minutes pour générer un brief de projet clair, et vous faire découvrir comment notre écosystème de membres développeurs et d'outils de pointe peut donner vie à votre vision.</p>
                     </div>
                     <div class="mt-12">
-                        <a href="#funnel-section" class="btn btn-primary btn-lg">Lancer ma Simulation</a>
+                        <a href="#funnel-section" id="start-audit-btn" class="btn btn-primary btn-lg">Lancer ma Simulation</a>
                     </div>
                 </div>
             </section>
@@ -145,18 +145,20 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(userAnswers)
                     });
-                    if (!response.ok) throw new Error(`API error: ${response.status}`);
+                    if (!response.ok) {
+                         throw new Error(`API error: ${response.status}`);
+                    }
                     const result = await response.json();
                     showAIResults(result.briefHtml);
                 } catch (error) {
                     console.error("Submission error:", error);
-                    funnelContainer.innerHTML = `<div class="text-center p-8"><h3 class="text-2xl font-bold text-red-600">ERREUR</h3><p class="text-lg text-gray-600 mt-4">Impossible de générer votre simulation. Veuillez réessayer.</p></div>`;
+                    funnelContainer.innerHTML = `<div class="text-center p-8"><h3 class="text-2xl font-bold text-red-600">ERREUR</h3><p class="text-lg text-gray-600 mt-4">La simulation n'a pas pu être générée. Assurez-vous d'utiliser cette démo sur un environnement serveur (ex: Vercel) et non en ouvrant le fichier localement.</p></div>`;
                 }
             }
             
             function showAIResults(resultHtml) {
                 const finalHtml = `
-                    <div class="result-container animate-slideInUp">${resultHtml}</div>
+                    <div class="result-container" style="animation: slideInUp 0.5s ease-out;">${resultHtml}</div>
                     <div class="text-center mt-12">
                          <button onclick="window.location.reload();" class="btn">Lancer une nouvelle simulation</button>
                     </div>`;
@@ -164,6 +166,8 @@
             }
 
             renderForm();
+            
+            // CORRECTION : Ligne déplacée ici, à l'intérieur du DOMContentLoaded
             document.querySelector("#start-audit-btn").addEventListener("click", function(e) {
                 e.preventDefault();
                 document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
