@@ -157,8 +157,13 @@
             }
             
             function showAIResults(resultHtml) {
+                // Nettoyage de la réponse de l'IA pour enlever les blocs de code Markdown
+                const cleanHtml = resultHtml.trim().replace(/^```html\n?/, '').replace(/```$/, '');
+
                 const finalHtml = `
-                    <div class="result-container" style="animation: slideInUp 0.5s ease-out;">${resultHtml}</div>
+                    <div class="result-container" style="animation: slideInUp 0.5s ease-out;">
+                        ${cleanHtml}
+                    </div>
                     <div class="text-center mt-12">
                          <button onclick="window.location.reload();" class="btn">Lancer une nouvelle simulation</button>
                     </div>`;
@@ -167,7 +172,7 @@
 
             renderForm();
             
-            // CORRECTION : Ligne déplacée ici, à l'intérieur du DOMContentLoaded
+            // Correction : Ligne déplacée ici, à l'intérieur du DOMContentLoaded
             document.querySelector("#start-audit-btn").addEventListener("click", function(e) {
                 e.preventDefault();
                 document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
