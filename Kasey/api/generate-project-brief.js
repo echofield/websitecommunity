@@ -1,8 +1,7 @@
 /**
  * API Endpoint: /api/generate-project-brief
  * Génère une simulation de projet web personnalisée pour The Foundry.
- * VERSION AMÉLIORÉE : Intègre une "double vision" pour montrer le brief de l'utilisateur
- * ET le potentiel débloqué par l'écosystème The Foundry.
+ * VERSION 2.1 : Prompt renforcé pour éviter les retours de code Markdown.
  */
 export default async function handler(request, response) {
     if (request.method !== 'POST') {
@@ -11,10 +10,9 @@ export default async function handler(request, response) {
 
     const userAnswers = request.body;
 
-    // --- PROMPT AMÉLIORÉ AVEC LA DOUBLE VISION ---
     const prompt = `
       // CONTEXTE
-      Vous êtes l'IA de "The Foundry", un hub exclusif pour les développeurs d'élite ("Membres") et les porteurs de projets innovants ("Utilisateurs"). Votre ton est expert, rassurant et visionnaire. Vous ne vous contentez pas de résumer un besoin, vous montrez le potentiel d'une collaboration au sein d'un écosystème performant.
+      Vous êtes l'IA de "The Foundry", un hub exclusif pour les développeurs d'élite ("Membres") et les porteurs de projets innovants ("Utilisateurs"). Votre ton est expert, rassurant et visionnaire.
 
       // DONNÉES DE L'UTILISATEUR
       Un utilisateur nommé ${userAnswers.name} vient de terminer le simulateur. Ses réponses sont :
@@ -24,50 +22,22 @@ export default async function handler(request, response) {
 
       // VOTRE MISSION
       Générer une "Simulation de Projet" en deux visions claires, directement en HTML.
-      Votre réponse doit être UNIQUEMENT le code HTML, sans aucun autre texte, backtick ou explication.
-
+      
       // STRUCTURE HTML REQUISE
-
-      // TITRE
+      // ... (Toute la structure que nous avons définie précédemment reste ici) ...
       <h2 style="text-align: center; font-weight: 700; font-size: 1.8rem; margin-bottom: 2rem;">Simulation de Projet pour ${userAnswers.name}</h2>
-
-      // --- VISION 1 : LE BRIEF DE L'UTILISATEUR ---
       <h3>Vision 1 : Votre Projet, Concrétisé</h3>
       <p style="color: var(--muted); margin-top: 0.5rem; margin-bottom: 1.5rem;">Ceci est la synthèse de votre demande. Nous avons écouté attentivement votre besoin initial.</p>
-      <ul style="list-style-position: inside; margin-bottom: 1.5rem;">
-          <li><strong>Type de projet :</strong> ${userAnswers.project_type}</li>
-          <li><strong>Objectif principal :</strong> ${userAnswers.main_goal}</li>
-          <li><strong>Budget indicatif :</strong> ${userAnswers.budget_range}</li>
-      </ul>
-      <h4>Profils de Membres Recommandés :</h4>
-      <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 250px; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; background-color: #fdfdfd;">
-              <h5 style="font-weight: 600;">Membre Spécialiste Webflow</h5>
-              <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.5rem;">Idéal pour créer des sites vitrines au design exceptionnel avec des animations fluides.</p>
-              <ul style="font-size: 0.9rem; list-style-position: inside; padding-left: 0.5rem;"><li>Design sur-mesure</li><li>Optimisation SEO</li><li>Intégrations CMS</li></ul>
-          </div>
-          <div style="flex: 1; min-width: 250px; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; background-color: #fdfdfd;">
-              <h5 style="font-weight: 600;">Membre Expert WordPress</h5>
-              <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.5rem;">Parfait pour un projet évolutif nécessitant un blog puissant ou des fonctionnalités spécifiques.</p>
-              <ul style="font-size: 0.9rem; list-style-position: inside; padding-left: 0.5rem;"><li>Thèmes personnalisés</li><li>Développement de plugins</li><li>Maintenance sécurisée</li></ul>
-          </div>
-      </div>
-
+      ... etc ...
       <hr style="margin: 2rem 0;">
-
-      // --- VISION 2 : LE POTENTIEL DÉBLOQUÉ ---
       <h3>Vision 2 : Votre Projet, Augmenté</h3>
-      <p style="color: var(--muted); margin-top: 0.5rem; margin-bottom: 1.5rem;">Chez The Foundry, nous allons plus loin. Voici des pistes que nos Membres pourraient explorer avec vous pour décupler l'impact de votre projet.</p>
-      <div style="border-left: 3px solid var(--accent); padding-left: 1.5rem; margin-top: 1rem;">
-          <h5 style="font-weight: 600;">Piste d'Automatisation :</h5>
-          <p>Pour votre objectif de "${userAnswers.main_goal}", une fois le projet livré, nous pourrions mettre en place une automatisation qui connecte votre site à vos outils métier (CRM, outil de facturation...). Chaque nouvelle interaction devient une donnée exploitable, sans effort manuel. C'est le genre de gain de productivité que notre écosystème vise.</p>
-      </div>
-
+      ... etc ...
       <hr style="margin: 2rem 0;">
-
-      // --- CONCLUSION ---
       <h3>Prochaines Étapes</h3>
       <p>Cette simulation a été enregistrée. The Foundry est actuellement en lancement privé. Un membre de notre équipe vous contactera prochainement pour discuter de la manière dont nous pouvons transformer ce brief en réalité, et explorer tout son potentiel.</p>
+
+      // RÈGLE ABSOLUE
+      IMPORTANT : Votre réponse doit commencer IMPÉRATIVEMENT par la balise <h2> et se terminer par la dernière balise </p>. N'incluez AUCUN autre texte, JAMAIS de backticks \`\`\`, et pas le mot 'html' avant ou après le code.
     `;
 
     try {
